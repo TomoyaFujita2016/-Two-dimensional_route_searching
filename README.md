@@ -1,4 +1,5 @@
 # Two-dimensional_route_searching
+
 ## Requirement
 - python3
 ## Usage
@@ -43,3 +44,7 @@ or
 4. Appendices & Attention
 - You can use "map_multi.csv" and "map_single.csv" as a test.
 - The all row & column of size in a file should be same.
+- Creating map file is a piece of cake.
+```
+python3 mapGenerator.py [save path] [row] [col] [minValue] [maxValue]
+```
