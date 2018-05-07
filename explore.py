@@ -126,7 +126,7 @@ def drawMap(flagMaps, bigMap):
         for lineNum, lineBool in zip(bigMap, flagMap):
             for Num, Bool in zip(lineNum, lineBool):
                 if Bool:
-                    print("%3s " % "#", end="")
+                    print("\033[92m%3s\033[0m " % "#", end="")
                 else:
                     print("%3d " % Num, end="")
             print()
