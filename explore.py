@@ -68,6 +68,7 @@ def createValueFlag(routeValue):
 def checkParentRoute(routeValue, y, x):
     numbers = []
     routeYX = []
+    minNumber = 0
     if 0 < y:
         numbers.append([2, routeValue[y-1][x][2]])
     if 0 < x:
@@ -143,6 +144,7 @@ def main():
     routeValue = calcrouteValue(bigMap)
     exMaps = exploreMap(routeValue)
     drawMap(exMaps, bigMap)
+    print("The map has %d solution(s)." % len(exMaps))
 
 if __name__=="__main__":
     main()
