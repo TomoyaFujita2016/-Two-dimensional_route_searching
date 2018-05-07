@@ -15,23 +15,23 @@ def readMap(path):
     print("=======================================")
     return bigMap
 
-def pickMinRoteValue(roteValue, y, x):
+def pickMinrouteValue(routeValue, y, x):
     numbers = []
     idx = 0
     if 0 < y:
-        numbers.append(roteValue[y-1][x][2])
+        numbers.append(routeValue[y-1][x][2])
     if 0 < x:
-        numbers.append(roteValue[y][x-1][0])
+        numbers.append(routeValue[y][x-1][0])
     if 0 < x and 0 < y:
-        numbers.append(roteValue[y-1][x-1][1])
+        numbers.append(routeValue[y-1][x-1][1])
     numbers = [x for x in numbers if x != None]
     return min(numbers)
 
 
-def calcRoteValue(bigMap):
-    roteValue = []
+def calcrouteValue(bigMap):
+    routeValue = []
     for y in range(len(bigMap)):
-        roteValue.append([])
+        routeValue.append([])
         for x in range(len(bigMap[0])):
             tmpValue = []
             
@@ -40,40 +40,40 @@ def calcRoteValue(bigMap):
                 tmpValue.append(bigMap[y][x] + 2 * bigMap[y + 1][x + 1])
                 tmpValue.append(bigMap[y][x] + bigMap[y + 1][x])
             else:
-                minRoteValue = pickMinRoteValue(roteValue, y, x)
+                minrouteValue = pickMinrouteValue(routeValue, y, x)
                 #right
                 if x != len(bigMap[0])-1:
-                    tmpValue.append(minRoteValue + bigMap[y][x+1])
+                    tmpValue.append(minrouteValue + bigMap[y][x+1])
                 else:
                     tmpValue.append(None)
                 
                 # right down
                 if not(y == len(bigMap)-1 or x == len(bigMap[0])-1):
-                    tmpValue.append(minRoteValue + 2 * bigMap[y+1][x+1])
+                    tmpValue.append(minrouteValue + 2 * bigMap[y+1][x+1])
                 else:
                     tmpValue.append(None)
                 
                 # down
                 if y != len(bigMap)-1:
-                    tmpValue.append(minRoteValue + bigMap[y+1][x])
+                    tmpValue.append(minrouteValue + bigMap[y+1][x])
                 else:
                     tmpValue.append(None)
             
-            roteValue[y].append(tmpValue)
-    return roteValue
+            routeValue[y].append(tmpValue)
+    return routeValue
 
-def createValueFlag(roteValue):
-    return [[False for _ in range(len(roteValue[0]))] for _ in range(len(roteValue))]
+def createValueFlag(routeValue):
+    return [[False for _ in range(len(routeValue[0]))] for _ in range(len(routeValue))]
 
-def checkParentRote(roteValue, y, x):
+def checkParentRoute(routeValue, y, x):
     numbers = []
-    roteYX = []
+    routeYX = []
     if 0 < y:
-        numbers.append([2, roteValue[y-1][x][2]])
+        numbers.append([2, routeValue[y-1][x][2]])
     if 0 < x:
-        numbers.append([0, roteValue[y][x-1][0]])
+        numbers.append([0, routeValue[y][x-1][0]])
     if 0 < x and 0 < y:
-        numbers.append([1, roteValue[y-1][x-1][1]])
+        numbers.append([1, routeValue[y-1][x-1][1]])
     
     numbers = [x for x in numbers if x[1] != None] 
     sortedNumbers = sorted(numbers, key=lambda x: x[1])
@@ -82,41 +82,41 @@ def checkParentRote(roteValue, y, x):
 
     for i in range(len(sortedNumbers[:-1])):
         if sortedNumbers[i][0] == 2:
-            roteYX.append([y-1, x])
+            routeYX.append([y-1, x])
         if sortedNumbers[i][0] == 0:
-            roteYX.append([y, x-1])
+            routeYX.append([y, x-1])
         if sortedNumbers[i][0] == 1:
-            roteYX.append([y-1, x-1])
+            routeYX.append([y-1, x-1])
         if sortedNumbers[i][1] != sortedNumbers[i+1][1]:
             break
-    return roteYX, minNumber
+    return routeYX, minNumber
         
-def putTrue(roteFlag, roteYX):
-    roteFlag[roteYX[0]][roteYX[1]] = True
-    return roteFlag
+def putTrue(routeFlag, routeYX):
+    routeFlag[routeYX[0]][routeYX[1]] = True
+    return routeFlag
 
-def exploreMap(roteValue):
+def exploreMap(routeValue):
     output = [] #flag map
-    maxLoopNum = -1 + len(roteValue) + len(roteValue[0])
-    y = len(roteValue) -1
-    x = len(roteValue[0]) -1
-    _, minNumber = checkParentRote(roteValue, y, x )
+    maxLoopNum = -1 + len(routeValue) + len(routeValue[0])
+    y = len(routeValue) -1
+    x = len(routeValue[0]) -1
+    _, minNumber = checkParentRoute(routeValue, y, x )
     print("Minimum value: %d" % minNumber)
-    roteFlag = createValueFlag(roteValue)
-    roteFlag = putTrue(roteFlag, [y,x])
-    roteFlagYXs = [[roteFlag, [y,x]]]
+    routeFlag = createValueFlag(routeValue)
+    routeFlag = putTrue(routeFlag, [y,x])
+    routeFlagYXs = [[routeFlag, [y,x]]]
     for cnt in range(maxLoopNum):
-        tmpRoteFlagYXs = []
-        for roteFlagYX in roteFlagYXs:
-            YXs, _ = checkParentRote(roteValue, roteFlagYX[1][0], roteFlagYX[1][1])
+        tmprouteFlagYXs = []
+        for routeFlagYX in routeFlagYXs:
+            YXs, _ = checkParentRoute(routeValue, routeFlagYX[1][0], routeFlagYX[1][1])
             if len(YXs) == 0:
-                rote = putTrue(roteFlagYX[0], [roteFlagYX[1][0], roteFlagYX[1][1]])
-                output.append(putTrue(rote, [0, 0]))
+                route = putTrue(routeFlagYX[0], [routeFlagYX[1][0], routeFlagYX[1][1]])
+                output.append(putTrue(route, [0, 0]))
                 continue
             for YX in YXs:
-                rote = putTrue(copy.deepcopy(roteFlagYX[0]), copy.deepcopy(roteFlagYX[1]))
-                tmpRoteFlagYXs.append([rote, YX])
-        roteFlagYXs = copy.deepcopy(tmpRoteFlagYXs)
+                route = putTrue(copy.deepcopy(routeFlagYX[0]), copy.deepcopy(routeFlagYX[1]))
+                tmprouteFlagYXs.append([route, YX])
+        routeFlagYXs = copy.deepcopy(tmprouteFlagYXs)
     return output
 
 def drawMap(flagMaps, bigMap):
@@ -140,8 +140,8 @@ def main():
         print("%s was NOT FOUND.")
         return
     bigMap = readMap(argv[1])
-    roteValue = calcRoteValue(bigMap)
-    exMaps = exploreMap(roteValue)
+    routeValue = calcrouteValue(bigMap)
+    exMaps = exploreMap(routeValue)
     drawMap(exMaps, bigMap)
 
 if __name__=="__main__":
