@@ -1,6 +1,10 @@
+from multiprocessing import Pool
+import multiprocessing as multi
 import copy
 import os
 import sys
+import time
+
 
 def readMap(path):
     bigMap = []
@@ -15,7 +19,7 @@ def readMap(path):
     print("=======================================")
     return bigMap
 
-def pickMinrouteValue(routeValue, y, x):
+def pickMinRouteValue(routeValue, y, x):
     numbers = []
     idx = 0
     if 0 < y:
@@ -36,11 +40,20 @@ def calcrouteValue(bigMap):
             tmpValue = []
             
             if [x, y] == [0, 0]:
-                tmpValue.append(bigMap[y][x] + bigMap[y][x + 1])
-                tmpValue.append(bigMap[y][x] + 2 * bigMap[y + 1][x + 1])
-                tmpValue.append(bigMap[y][x] + bigMap[y + 1][x])
+                if 1 < len(bigMap[0]):
+                    tmpValue.append(bigMap[y][x] + bigMap[y][x + 1])
+                else:
+                    tmpValue.append(None)
+                if 1 < len(bigMap[0]) and 1 < len(bigMap):
+                    tmpValue.append(bigMap[y][x] + 2 * bigMap[y + 1][x + 1])
+                else:
+                    tmpValue.append(None)
+                if 1 < len(bigMap):
+                    tmpValue.append(bigMap[y][x] + bigMap[y + 1][x])
+                else:
+                    tmpValue.append(None)
             else:
-                minrouteValue = pickMinrouteValue(routeValue, y, x)
+                minrouteValue = pickMinRouteValue(routeValue, y, x)
                 #right
                 if x != len(bigMap[0])-1:
                     tmpValue.append(minrouteValue + bigMap[y][x+1])
@@ -88,7 +101,7 @@ def checkParentRoute(routeValue, y, x):
             routeYX.append([y, x-1])
         if sortedNumbers[i][0] == 1:
             routeYX.append([y-1, x-1])
-        if len(sortedNumbers) == 1:
+        if i == len(sortedNumbers) -1:
             break
         if sortedNumbers[i][1] != sortedNumbers[i+1][1]:
             break
@@ -135,6 +148,7 @@ def drawMap(flagMaps, bigMap):
             print()
 
 def main():
+    start = time.time()
     argv = sys.argv
     if len(argv) < 2:
         print("Please pass the map file path as a argument.")
@@ -142,11 +156,15 @@ def main():
     if not os.path.exists(argv[1]):
         print("%s was NOT FOUND.")
         return
+
     bigMap = readMap(argv[1])
     routeValue = calcrouteValue(bigMap)
     exMaps = exploreMap(routeValue)
     drawMap(exMaps, bigMap)
     print("The map has %d solution(s)." % len(exMaps))
+
+    elapsedTime = time.time() - start
+    print ("elapsedTime[sec]: %.4f" % elapsedTime)
 
 if __name__=="__main__":
     main()
