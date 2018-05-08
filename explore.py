@@ -81,13 +81,15 @@ def checkParentRoute(routeValue, y, x):
     if len(sortedNumbers) != 0:
         minNumber = sortedNumbers[0][1]
 
-    for i in range(len(sortedNumbers[:-1])):
+    for i in range(len(sortedNumbers)):
         if sortedNumbers[i][0] == 2:
             routeYX.append([y-1, x])
         if sortedNumbers[i][0] == 0:
             routeYX.append([y, x-1])
         if sortedNumbers[i][0] == 1:
             routeYX.append([y-1, x-1])
+        if len(sortedNumbers) == 1:
+            break
         if sortedNumbers[i][1] != sortedNumbers[i+1][1]:
             break
     return routeYX, minNumber
@@ -112,7 +114,7 @@ def exploreMap(routeValue):
             YXs, _ = checkParentRoute(routeValue, routeFlagYX[1][0], routeFlagYX[1][1])
             if len(YXs) == 0:
                 route = putTrue(routeFlagYX[0], [routeFlagYX[1][0], routeFlagYX[1][1]])
-                output.append(putTrue(route, [0, 0]))
+                output.append(route)
                 continue
             for YX in YXs:
                 route = putTrue(copy.deepcopy(routeFlagYX[0]), copy.deepcopy(routeFlagYX[1]))
