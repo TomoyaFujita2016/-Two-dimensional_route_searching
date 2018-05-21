@@ -120,22 +120,30 @@ def exploreMap(routeValue):
     print("Minimum value: %d" % minNumber)
     routeFlag = createValueFlag(routeValue)
     routeFlag = putTrue(routeFlag, [y,x])
-    routeXY = [[y, x]]
+    routeXY = [[[x, y]]]
     routeFlagYXs = [[routeFlag, [y,x]]]
+
     for cnt in range(maxLoopNum):
         tmprouteFlagYXs = []
-        for routeFlagYX in routeFlagYXs:
+        for i, routeFlagYX in enumerate(routeFlagYXs):
             YXs, _ = checkParentRoute(routeValue, routeFlagYX[1][0], routeFlagYX[1][1])
             if len(YXs) == 0:
+                routeXY[i] = routeXY[i][::-1]
                 route = putTrue(routeFlagYX[0], [routeFlagYX[1][0], routeFlagYX[1][1]])
                 output.append(route)
                 continue
             for YX in YXs:
-                routeXY.append(YX[::-1])
+                # Here is very dirty ...
+                try:
+                    routeXY[i].append(YX[::-1])
+                except:
+                    routeXY.append(copy.deepcopy(routeXY[i-1][:-1]))
+                    routeXY[i].append(YX[::-1])
+
                 route = putTrue(copy.deepcopy(routeFlagYX[0]), copy.deepcopy(routeFlagYX[1]))
                 tmprouteFlagYXs.append([route, YX])
         routeFlagYXs = copy.deepcopy(tmprouteFlagYXs)
-    return output, routeXY[::-1]
+    return output, routeXY
 
 def drawMap(flagMaps, bigMap):
     for i, flagMap in enumerate(flagMaps):
@@ -163,6 +171,7 @@ def main():
     bigMap = readMap(argv[1])
     routeValue = calcrouteValue(bigMap)
     exMaps, _ = exploreMap(routeValue)
+    print(_)
     drawMap(exMaps, bigMap)
     print("The map has %d solution(s)." % len(exMaps))
 
