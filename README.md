@@ -1,5 +1,5 @@
 # Two-dimensional_route_searching
-<img src="https://github.com/TomoyaFujita2016/2D_Route_searching/blob/master/model.JPG?raw=true" width=500px>
+<img src="https://github.com/TomoyaFujita2016/2D_Route_searching/blob/master/imgs/model.JPG?raw=true" width=500px>
 
 ## Requirement
 - python3
@@ -49,3 +49,4 @@ or
 ```
 python3 mapGenerator.py [save path] [row] [col] [minValue] [maxValue]
 ```
+<img src="https://github.com/TomoyaFujita2016/2D_Route_searching/blob/master/imgs/screenshot01.png?raw=true" width=300><img src="https://github.com/TomoyaFujita2016/2D_Route_searching/blob/master/imgs/screenshot03.png?raw=true" width=500>
