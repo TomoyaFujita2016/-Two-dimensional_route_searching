@@ -171,7 +171,6 @@ def main():
     bigMap = readMap(argv[1])
     routeValue = calcrouteValue(bigMap)
     exMaps, _ = exploreMap(routeValue)
-    print(_)
     drawMap(exMaps, bigMap)
     print("The map has %d solution(s)." % len(exMaps))
 
